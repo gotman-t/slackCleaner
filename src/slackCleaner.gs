@@ -1,5 +1,5 @@
 const token = '';
-// token ‚ÍˆÈ‰º‚ÌŒ ŒÀ‚ð—^‚¦‚½‚à‚Ì‚ð”­s‚·‚é‚±‚Æ
+// token ã¯ä»¥ä¸‹ã®æ¨©é™ã‚’ä¸ŽãˆãŸã‚‚ã®ã‚’ç™ºè¡Œã™ã‚‹ã“ã¨
 // * channels:history
 // * channels:read
 // * chat:write
@@ -10,20 +10,21 @@ const token = '';
 // * mpim:history
 // * mpim:read
 
+const waitTime = 1000; // å¾…ã¡æ™‚é–“[ms]
 
 function clearSlack(channelName, latestDate) {
   const unixTimestamp = Math.round( latestDate.getTime() / 1000 );
 
-  // ƒ`ƒƒƒ“ƒlƒ‹ƒŠƒXƒg‚ðŽæ“¾
+  // ãƒãƒ£ãƒ³ãƒãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—
   const channelList = getChannelList();
 
-  // ‘ÎÛ‚Ìƒ`ƒƒƒ“ƒlƒ‹ID‚ðŽæ“¾
+  // å¯¾è±¡ã®ãƒãƒ£ãƒ³ãƒãƒ«IDã‚’å–å¾—
   const id = channelList.filter(channel => channel.name == channelName).map(channel => channel.id);
 
-  // “Še‚ð‡X‚Éíœ
+  // æŠ•ç¨¿ã‚’é †ã€…ã«å‰Šé™¤
   getMessage(id, unixTimestamp).forEach(ts => {
     deleteMessage(id, ts);
-    Utilities.sleep(1000);  // ‚‘¬‚ÅƒŠƒNƒGƒXƒg‚ð‘—‚é‚ÆƒGƒ‰[‚É‚È‚é‰Â”\«‚ª‚ ‚é‚½‚ßA‘Ò‚¿ˆ—‚ð’Ç‰Á
+    Utilities.sleep(waitTime);  // é«˜é€Ÿã§ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ã‚‹ã¨ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãŸã‚ã€å¾…ã¡å‡¦ç†ã‚’è¿½åŠ 
   });
 }
 
@@ -36,7 +37,7 @@ function getChannelList() {
 }
 
 function getMessage(channelId, latest) {
-  // ƒ`ƒƒƒ“ƒlƒ‹“à‚©‚çƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ìˆê——‚ðŽæ“¾
+  // ãƒãƒ£ãƒ³ãƒãƒ«å†…ã‹ã‚‰ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®ä¸€è¦§ã‚’å–å¾—
   const url = "https://slack.com/api/conversations.history?token="+token+"&channel="+channelId+"&latest="+latest+"&limit=2000";
   const response = UrlFetchApp.fetch(url);
   const json = response.getContentText();
@@ -44,7 +45,7 @@ function getMessage(channelId, latest) {
   const tsList = data.messages.map(x => x["ts"]);
   const replyList = tsList.map(ts => getReply(channelId, ts));
   
-  // ‘SƒŠƒvƒ‰ƒC(ƒXƒŒƒbƒhŒ³ŠÜ‚Þ)‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ðŒ‹‡
+  // å…¨ãƒªãƒ—ãƒ©ã‚¤(ã‚¹ãƒ¬ãƒƒãƒ‰å…ƒå«ã‚€)ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’çµåˆ
   const msgTsList = [];
   replyList.forEach(reply => reply.forEach(rep => msgTsList.push(rep["ts"])));
   
