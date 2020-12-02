@@ -1,9 +1,9 @@
 function main(){
-  const channelNameList = [''];  // íœ‘ÎÛ‚Ìƒ`ƒƒƒ“ƒlƒ‹–¼‚ðÝ’è
+  const channelNameList = [''];  // å‰Šé™¤å¯¾è±¡ã®ãƒãƒ£ãƒ³ãƒãƒ«åã‚’è¨­å®š (è¤‡æ•°è¨­å®šå¯)
   
-  const last = 7; // ‰½“ú‘O‚Ü‚Å‚Ì“Še‚ðíœ‚·‚é‚©‚ðÝ’è
+  const last = 7; // ä½•æ—¥å‰ã¾ã§ã®æŠ•ç¨¿ã‚’å‰Šé™¤ã™ã‚‹ã‹ã‚’è¨­å®š
   const date = new Date();
-  date.setDate(date.getDate - last);
+  date.setDate(date.getDay() - last);
   
   channelNameList.forEach(channel => clearSlack(channel, date));
 }
